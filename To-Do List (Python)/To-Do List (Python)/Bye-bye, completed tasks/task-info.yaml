@@ -392,6 +392,13 @@ files:
     if __name__ == '__main__':
         ToDoList('todolist.todolist').run_tests()
   learner_created: false
+- name: todo.db
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/105/stages/573/implement#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">Hyperskill</a>
+    to continue learning.
+  time: "Wed, 03 May 2023 06:27:58 UTC"
 record: -1

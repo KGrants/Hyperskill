@@ -30,7 +30,9 @@ def first_screen():
     menu_list = ["1) Today's tasks",
                  "2) Week's tasks",
                  "3) All tasks",
-                 "4) Add a task",
+                 "4) Missed tasks",
+                 "5) Add a task",
+                 "6) Delete a task",
                  "0) Exit"]
     print("", *menu_list, sep="\n")
     return int(input(">".strip()))
@@ -68,6 +70,19 @@ def show_tasks_week():
     return
 
 
+def show_missed_tasks():
+    counter = 1
+    date = datetime.today().date()
+    result = session.query(Tasks).filter(Tasks.deadline < date).order_by(Tasks.deadline).all()
+    print("Missed tasks:")
+    for row in result:
+        set_date = datetime.strptime(str(row.deadline),'%Y-%m-%d')
+        date_to_print = datetime.strftime(set_date, '%#d %b')
+        print(f"{counter}. {row.task}. {date_to_print}")
+        counter += 1
+    return
+
+
 def add_a_task():
     user_input = input("Enter a task\n>")
     deadline_input = input("Enter a deadline\n>")
@@ -75,6 +90,27 @@ def add_a_task():
     session.add(Tasks(task=user_input, deadline=date))
     session.commit()
     print("The task has been added!")
+    return
+
+
+def delete_a_task():
+    counter = 1
+    result = session.query(Tasks).order_by(Tasks.deadline).all()
+    if session.query(Tasks).order_by(Tasks.deadline).first() is None:
+        print("Nothing to delete")
+        return
+    print("Choose the number of the task you want to delete:")
+    print("All tasks:")
+    for row in result:
+        set_date = datetime.strptime(str(row.deadline), '%Y-%m-%d')
+        date_to_print = datetime.strftime(set_date, '%#d %b')
+        print(f"{counter}. {row.task}. {date_to_print}")
+        counter += 1
+    user_input = int(input(">"))
+    specific_row = result[user_input-1]  # in case rows is not empty
+    session.delete(specific_row)
+    session.commit()
+    print("The task has been deleted!")
     return
 
 
@@ -94,11 +130,14 @@ def main():
         elif user_input == 3:
             show_tasks_all()
         elif user_input == 4:
+            show_missed_tasks()
+        elif user_input == 5:
             add_a_task()
+        elif user_input == 6:
+            delete_a_task()
         else:
             exit_app()
 
 
 if __name__ == '__main__':
     main()
-
