@@ -1,2 +1,2 @@
 # Hyperskill
-Courses I've done on Hyperskill uploaded here
+Courses done on Hyperskill uploaded here
